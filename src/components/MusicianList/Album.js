@@ -5,10 +5,11 @@ class Album extends React.Component {
     const response = await fetch(
       "https://jsonplaceholder.typicode.com/photos?_limit=5"
     );
+
     const albumsData = await response.json();
     console.log("hello");
     console.log(albumsData);
-    this.props.showAlbumsList(albumsData);
+    this.props.showAlbumsImgList(albumsData);
     console.log();
   };
 
@@ -16,10 +17,10 @@ class Album extends React.Component {
     return (
       <ul>
         {/* <li>ID: {this.props.id}</li> */}
-        <li>{this.props.name}</li>
+        <li>Album Title: {this.props.name}</li>
         <li>
           <button onClick={this.showAlbums}>
-            View {this.props.name}'s albums
+            View {this.props.name}'s album
           </button>
         </li>
       </ul>

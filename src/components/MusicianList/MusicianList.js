@@ -3,23 +3,32 @@ import Album from "./Album";
 
 class MusicianList extends React.Component {
   state = {
-    musiciansList: [],
+    musicianData: [],
+    albumsTitleList: [],
     isAlbumsShown: false,
-    albumsList: [],
+    albumsImgList: [],
   };
 
   fetchAPI = async () => {
-    const response = await fetch("https://jsonplaceholder.typicode.com/users");
-    const musiciansData = await response.json();
+    const response1 = await fetch(
+      "https://jsonplaceholder.typicode.com/users?id=1"
+    );
+    const response2 = await fetch(
+      "https://jsonplaceholder.typicode.com/albums?userId=1"
+    );
+    const userData = await response1.json();
+    const albumsData = await response2.json();
     this.setState({
-      musiciansList: musiciansData,
+      musicianData: userData[0],
+      albumsTitleList: albumsData,
     });
-    console.log(musiciansData);
+    console.log(userData[0]);
+    console.log(albumsData);
   };
 
-  handleShowAlbums = (albumsList) => {
+  handleShowAlbumImg = (albumsImgList) => {
     this.setState({
-      albumsList: albumsList,
+      albumsImgList: albumsImgList,
       isAlbumsShown: true,
     });
   };
@@ -30,20 +39,20 @@ class MusicianList extends React.Component {
   render() {
     return (
       <section>
-        <h1>Musicians in Vancouver</h1>
+        <h1>{this.state.musicianData.name}'s masterpieces</h1>
         <div className="list">
           {!this.state.isAlbumsShown ? (
-            this.state.musiciansList.map((musician) => (
+            this.state.albumsTitleList.map((album) => (
               <Album
-                key={musician.id}
-                // id={musician.id}
-                name={musician.name}
-                showAlbumsList={this.handleShowAlbums}
+                key={album.id}
+                // id={album.id}
+                name={album.title}
+                showAlbumsImgList={this.handleShowAlbumImg}
               />
             ))
           ) : (
             <div>
-              {this.state.albumsList.map((album) => (
+              {this.state.albumsImgList.map((album) => (
                 <div key={album.id}>
                   <p>{album.title}</p>
                   <img src={album.thumbnailUrl} alt="album" />
