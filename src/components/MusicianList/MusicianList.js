@@ -1,6 +1,8 @@
 import React from "react";
 import Album from "./Album";
 
+// Parent
+
 class MusicianList extends React.Component {
   state = {
     musicianData: [],
@@ -9,11 +11,14 @@ class MusicianList extends React.Component {
     albumsPhotoList: [],
   };
 
+  // create method which will be called in componentDidMount()
   fetchAPI = async () => {
     try {
+      // fetch one of users
       const responseUser = await fetch(
         "https://jsonplaceholder.typicode.com/users?id=1"
       );
+      // fetch albums
       const responseAlbum = await fetch(
         "https://jsonplaceholder.typicode.com/albums?userId=1"
       );
@@ -21,14 +26,14 @@ class MusicianList extends React.Component {
         throw Error(`Oops, error! Error code: ${responseUser.status}`);
       if (responseAlbum.status !== 200)
         throw Error(`Oops, error! Error code: ${responseAlbum.status}`);
+
       const userData = await responseUser.json();
       const albumsData = await responseAlbum.json();
+      // set state
       this.setState({
         musicianData: userData[0],
         albumsTitleList: albumsData,
       });
-      console.log(userData[0]);
-      console.log(albumsData);
     } catch (error) {
       console.log(error);
     }
@@ -55,6 +60,8 @@ class MusicianList extends React.Component {
                 <Album
                   key={album.id}
                   albumData={album}
+                  // passing "handleShowAlbumPhoto" function to Album
+                  // and showAlbumsPhotoList will be a callback
                   showAlbumsPhotoList={this.handleShowAlbumPhoto}
                 />
               ))

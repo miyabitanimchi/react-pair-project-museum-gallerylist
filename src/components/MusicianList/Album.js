@@ -1,15 +1,24 @@
 import React from "react";
 
+// Child
+
 class Album extends React.Component {
   showAlbumsPhotos = async (e, albumId) => {
     e.preventDefault();
-    const response = await fetch(
-      `https://jsonplaceholder.typicode.com/photos?albumId=${albumId}`
-    );
+    try {
+      const response = await fetch(
+        `https://jsonplaceholder.typicode.com/photos?albumId=${albumId}`
+      );
 
-    const albumsData = await response.json();
-    console.log(albumsData);
-    this.props.showAlbumsPhotoList(albumsData);
+      if (response.status !== 200)
+        throw Error(`Oops, error! Error code: ${response.status}`);
+
+      const albumsData = await response.json();
+      //
+      this.props.showAlbumsPhotoList(albumsData);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   render() {
