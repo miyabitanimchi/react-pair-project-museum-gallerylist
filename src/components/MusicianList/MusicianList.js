@@ -6,29 +6,37 @@ class MusicianList extends React.Component {
     musicianData: [],
     albumsTitleList: [],
     isAlbumsShown: false,
-    albumsImgList: [],
+    albumsPhotoList: [],
   };
 
   fetchAPI = async () => {
-    const response1 = await fetch(
-      "https://jsonplaceholder.typicode.com/users?id=1"
-    );
-    const response2 = await fetch(
-      "https://jsonplaceholder.typicode.com/albums?userId=1"
-    );
-    const userData = await response1.json();
-    const albumsData = await response2.json();
-    this.setState({
-      musicianData: userData[0],
-      albumsTitleList: albumsData,
-    });
-    console.log(userData[0]);
-    console.log(albumsData);
+    try {
+      const responseUser = await fetch(
+        "https://jsonplaceholder.typicode.com/users?id=1"
+      );
+      const responseAlbum = await fetch(
+        "https://jsonplaceholder.typicode.com/albums?userId=1"
+      );
+      if (responseUser.status !== 200)
+        throw Error(`Oops, error! Error code: ${responseUser.status}`);
+      if (responseAlbum.status !== 200)
+        throw Error(`Oops, error! Error code: ${responseAlbum.status}`);
+      const userData = await responseUser.json();
+      const albumsData = await responseAlbum.json();
+      this.setState({
+        musicianData: userData[0],
+        albumsTitleList: albumsData,
+      });
+      console.log(userData[0]);
+      console.log(albumsData);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  handleShowAlbumImg = (albumsImgList) => {
+  handleShowAlbumPhoto = (albumsPhotoList) => {
     this.setState({
-      albumsImgList: albumsImgList,
+      albumsPhotoList: albumsPhotoList,
       isAlbumsShown: true,
     });
   };
@@ -38,30 +46,34 @@ class MusicianList extends React.Component {
   }
   render() {
     return (
-      <section>
+      <>
         <h1>{this.state.musicianData.name}'s masterpieces</h1>
-        <div className="list">
-          {!this.state.isAlbumsShown ? (
-            this.state.albumsTitleList.map((album) => (
-              <Album
-                key={album.id}
-                // id={album.id}
-                name={album.title}
-                showAlbumsImgList={this.handleShowAlbumImg}
-              />
-            ))
-          ) : (
-            <div>
-              {this.state.albumsImgList.map((album) => (
-                <div key={album.id}>
-                  <p>{album.title}</p>
-                  <img src={album.thumbnailUrl} alt="album" />
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
+        <section>
+          <div className="list">
+            {!this.state.isAlbumsShown ? (
+              this.state.albumsTitleList.map((album) => (
+                <Album
+                  key={album.id}
+                  albumData={album}
+                  showAlbumsPhotoList={this.handleShowAlbumPhoto}
+                />
+              ))
+            ) : (
+              <div>
+                {this.state.albumsPhotoList.map((album) => (
+                  <div key={album.id}>
+                    <p>{album.title}</p>
+                    <img src={album.thumbnailUrl} alt="album" />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+        <footer>
+          <span>&copy; 2021 Carlos & Miyabi</span>
+        </footer>
+      </>
     );
   }
 }
