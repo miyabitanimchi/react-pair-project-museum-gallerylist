@@ -6,36 +6,46 @@ class Gallery extends React.Component {
   state = {
     galleryImg: "https://via.placeholder.com/150/92c952",
   };
-  showAlbumsPhotos = async (e, albumId) => {
+  showGalleryPhotos = async (e, photoData) => {
     e.preventDefault();
     try {
       const response = await fetch(
-        `https://jsonplaceholder.typicode.com/photos?albumId=${albumId}`
+        `https://jsonplaceholder.typicode.com/photos?albumId=${photoData.id}`
       );
+      console.log(photoData.id);
 
       if (response.status !== 200)
         throw Error(`Oops, error! Error code: ${response.status}`);
 
-      const albumsData = await response.json();
-      //
-      this.props.showgalleryPhotosList(albumsData);
+      const galleryData = await response.json();
+      console.log(galleryData);
+      this.props.showGalleryPhotosList(
+        photoData.id,
+        photoData.title,
+        galleryData
+      );
     } catch (error) {
       console.log(error);
     }
   };
 
+  // get 1 random from 50 from the id 1, 2, ...10
   getGalleryImg = async (albumId) => {
     const response = await fetch(
       `https://jsonplaceholder.typicode.com/photos?albumId=${albumId}`
     );
     const photosData = await response.json();
+    // console.log(albumId);
     const randomIndex = Math.floor(Math.random() * photosData.length);
+    // console.log(`this is length: ${photosData.length}`);
+    // console.log(`this is random index: ${randomIndex}`);
     this.setState({
       galleryImg: photosData[randomIndex].url,
     });
   };
 
   componentDidMount() {
+    // why this is also randomized??
     this.getGalleryImg(this.props.photoData.id);
   }
 
@@ -54,7 +64,7 @@ class Gallery extends React.Component {
             </p>
             <button
               className="btn-link"
-              onClick={(e) => this.showAlbumsPhotos(e, this.props.photoData.id)}
+              onClick={(e) => this.showGalleryPhotos(e, this.props.photoData)}
             >
               View This Gallary
             </button>

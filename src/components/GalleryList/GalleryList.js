@@ -1,28 +1,31 @@
 import React from "react";
 import Gallery from "./Gallery";
+import GalleryPhotos from "./GalleryPhotos";
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
 
 // Parent
 
 class GalleryList extends React.Component {
   state = {
     galleryTitlesList: [],
-    isGalleryImgShown: false,
+    isGalleryPhotosListShown: false,
+    galleyId: "",
+    galleryTitle: "",
+    galleryPhotosList: [],
   };
 
-  // create method which will be called in componentDidMount()
+  // fetch API which will be called in componentDidMount()
   fetchAPI = async () => {
     try {
       // fetch gallery titles
-      const responseAlbum = await fetch(
+      const responseGalleryTitle = await fetch(
         "https://jsonplaceholder.typicode.com/albums?userId=1"
       );
-      if (responseAlbum.status !== 200)
-        throw Error(`Oops, error! Error code: ${responseAlbum.status}`);
+      if (responseGalleryTitle.status !== 200)
+        throw Error(`Oops, error! Error code: ${responseGalleryTitle.status}`);
 
-      // convert data to json
-      const galleryTitlesData = await responseAlbum.json();
-
-      console.log(galleryTitlesData);
+      const galleryTitlesData = await responseGalleryTitle.json();
 
       // set state
       this.setState({
@@ -33,10 +36,23 @@ class GalleryList extends React.Component {
     }
   };
 
-  handleShowAlbumPhoto = (galleryPhotosList) => {
+  // This function is passed to Gallery.js as a props name "showGalleryPhotosList".
+  // when "view this gallery" is clicked, the onclick showGalleryPhotos is fired
+  // and fetch the data of "photos".
+  // Finally "showGalleryPhotosList" is called in "showGalleryPhotos", and pass the arguments
+  // are passed to (galleyId, galleryTitle, galleryPhotosList) ,and set those values with setState()
+  handleShowGalleryPhotos = (galleyId, galleryTitle, galleryPhotosList) => {
     this.setState({
+      galleyId: galleyId,
+      galleryTitle: galleryTitle,
       galleryPhotosList: galleryPhotosList,
-      isGalleryImgShown: true,
+      isGalleryPhotosListShown: true,
+    });
+  };
+
+  handleBackButton = () => {
+    this.setState({
+      isGalleryPhotosListShown: false,
     });
   };
 
@@ -45,31 +61,35 @@ class GalleryList extends React.Component {
   }
   render() {
     return (
-      <section>
-        <h1>Our Galleries</h1>
-        {!this.state.isGalleryImgShown ? (
-          <ul>
-            {this.state.galleryTitlesList.map((photo) => (
-              <Gallery
-                key={photo.id}
-                photoData={photo}
-                // passing "handleShowAlbumPhoto" function to Album
-                // and showgalleryPhotosList will be a callback
-                showgalleryPhotosList={this.handleShowAlbumPhoto}
-              />
-            ))}
-          </ul>
-        ) : (
-          <div>
-            {this.state.galleryPhotosList.map((album) => (
-              <div key={album.id}>
-                <p>{album.title}</p>
-                <img src={album.thumbnailUrl} alt="album" />
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
+      <>
+        <Header key={1} />
+        <section>
+          {!this.state.isGalleryPhotosListShown ? (
+            <>
+              <h1>Welcome to Museum of Canada</h1>
+              <ul>
+                {this.state.galleryTitlesList.map((photo) => (
+                  <Gallery
+                    key={photo.id}
+                    photoData={photo}
+                    // passing "handleShowGalleryPhotos" function to Album
+                    // and showGalleryPhotosList will be a callback
+                    showGalleryPhotosList={this.handleShowGalleryPhotos}
+                  />
+                ))}
+              </ul>
+            </>
+          ) : (
+            <GalleryPhotos
+              galleryId={this.state.galleryId}
+              galleryTitle={this.state.galleryTitle}
+              galleryPhotos={this.state.galleryPhotosList}
+              backButton={this.handleBackButton}
+            />
+          )}
+        </section>
+        <Footer key={2} />
+      </>
     );
   }
 }
