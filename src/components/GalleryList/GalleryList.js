@@ -1,8 +1,6 @@
 import React from "react";
 import Gallery from "./Gallery";
 import GalleryPhotos from "./GalleryPhotos";
-import Header from "../Header/Header";
-import Footer from "../Footer/Footer";
 
 // Parent
 
@@ -62,33 +60,34 @@ class GalleryList extends React.Component {
   render() {
     return (
       <>
-        <Header key={1} />
         <section>
-          {!this.state.isGalleryPhotosListShown ? (
-            <>
-              <h1>Welcome to Museum of Canada</h1>
-              <ul>
-                {this.state.galleryTitlesList.map((photo) => (
-                  <Gallery
-                    key={photo.id}
-                    photoData={photo}
-                    // passing "handleShowGalleryPhotos" function to Album
-                    // and showGalleryPhotosList will be a callback
-                    showGalleryPhotosList={this.handleShowGalleryPhotos}
-                  />
-                ))}
-              </ul>
-            </>
-          ) : (
-            <GalleryPhotos
-              galleryId={this.state.galleryId}
-              galleryTitle={this.state.galleryTitle}
-              galleryPhotos={this.state.galleryPhotosList}
-              backButton={this.handleBackButton}
-            />
-          )}
+          <div className="main-content">
+            {!this.state.isGalleryPhotosListShown ? (
+              <>
+                <h1>Welcome to Museum of Canada</h1>
+                <h2>Featured Exhibitions</h2>
+                <ul>
+                  {this.state.galleryTitlesList.map((photo) => (
+                    <Gallery
+                      key={photo.id}
+                      photoData={photo}
+                      // passing "handleShowGalleryPhotos" function to Album
+                      // and showGalleryPhotosList will be a callback
+                      showGalleryPhotosList={this.handleShowGalleryPhotos}
+                    />
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <GalleryPhotos
+                galleryId={this.state.galleryId}
+                galleryTitle={this.state.galleryTitle}
+                galleryPhotos={this.state.galleryPhotosList}
+                backButton={this.handleBackButton}
+              />
+            )}
+          </div>
         </section>
-        <Footer key={2} />
       </>
     );
   }

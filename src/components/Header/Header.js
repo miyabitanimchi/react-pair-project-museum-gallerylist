@@ -2,7 +2,11 @@ const Header = () => {
   return (
     <header>
       <h1 className="navBarName">
-        <a href="../GalleryList/GalleryList.js">MoC</a>
+        <a href="../GalleryList/GalleryList.js">
+          MUSEUM <span>of</span>
+          <br />
+          CANADA
+        </a>
       </h1>
       <nav className="header-nav">
         <ul>
@@ -13,7 +17,7 @@ const Header = () => {
             <a href="../GalleryList/GalleryList.js">VISIT</a>
           </li>
           <li>
-            <a href="../GalleryList/GalleryList.js">EVENT</a>
+            <a href="../GalleryList/GalleryList.js">EXHIBITIONS & EVENTS</a>
           </li>
           <li>
             <a href="../GalleryList/GalleryList.js">EDUCATION</a>

@@ -29,7 +29,7 @@ class Gallery extends React.Component {
     }
   };
 
-  // get 1 random from 50 from the id 1, 2, ...10
+  // get 1 random image from 50 from the id 1, 2, ...10
   getGalleryImg = async (albumId) => {
     const response = await fetch(
       `https://jsonplaceholder.typicode.com/photos?albumId=${albumId}`
@@ -44,6 +44,11 @@ class Gallery extends React.Component {
     });
   };
 
+  componentWillMount() {
+    // Scroll to the top
+    window.scrollTo(0, 0);
+  }
+
   componentDidMount() {
     // why this is also randomized??
     this.getGalleryImg(this.props.photoData.id);
@@ -52,7 +57,6 @@ class Gallery extends React.Component {
   render() {
     return (
       <>
-        {/* <li>ID: {this.props.id}</li> */}
         <li className="list">
           <div className="galleryDescriptionWrap">
             <h2 className="galleryTitle">{this.props.photoData.title}</h2>
@@ -66,12 +70,14 @@ class Gallery extends React.Component {
               className="btn-link"
               onClick={(e) => this.showGalleryPhotos(e, this.props.photoData)}
             >
-              View This Gallary
+              view details
             </button>
           </div>
-          {/* <div className="imgWrap"> */}
-          <img className="topGalleryImg" src={this.state.galleryImg} alt="" />
-          {/* </div> */}
+          <img
+            className="topGalleryImg"
+            src={this.state.galleryImg}
+            alt={this.props.photoData.title}
+          />
         </li>
       </>
     );
