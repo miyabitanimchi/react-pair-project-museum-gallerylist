@@ -8,7 +8,7 @@ class GalleryList extends React.Component {
   state = {
     galleryTitlesList: [],
     isGalleryPhotosListShown: false,
-    galleyId: "",
+    galleryId: "",
     galleryTitle: "",
     galleryPhotosList: [],
   };
@@ -16,7 +16,7 @@ class GalleryList extends React.Component {
   // fetch API which will be called in componentDidMount()
   fetchAPI = async () => {
     try {
-      // fetch gallery titles
+      // fetch gallery titles ... only get 10 albums with userId 1
       const responseGalleryTitle = await fetch(
         "https://jsonplaceholder.typicode.com/albums?userId=1"
       );
@@ -34,14 +34,15 @@ class GalleryList extends React.Component {
     }
   };
 
-  // This function is passed to Gallery.js as a props name "showGalleryPhotosList".
-  // when "view this gallery" is clicked, the onclick showGalleryPhotos is fired
+  // This function is passed to Gallery.js as a props named "showGalleryPhotosList".
+  // when "view details" is clicked, the onclick showGalleryPhotos is fired
   // and fetch the data of "photos".
   // Finally "showGalleryPhotosList" is called in "showGalleryPhotos", and pass the arguments
-  // are passed to (galleyId, galleryTitle, galleryPhotosList) ,and set those values with setState()
-  handleShowGalleryPhotos = (galleyId, galleryTitle, galleryPhotosList) => {
+  // are passed to (galleryId, galleryTitle, galleryPhotosList) ,and set those values with setState()
+  handleShowGalleryPhotos = (galleryId, galleryTitle, galleryPhotosList) => {
     this.setState({
-      galleyId: galleyId,
+      // these will be passed to "GalleryPhotos.js"
+      galleryId: galleryId,
       galleryTitle: galleryTitle,
       galleryPhotosList: galleryPhotosList,
       isGalleryPhotosListShown: true,

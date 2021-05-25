@@ -17,8 +17,9 @@ class Gallery extends React.Component {
       if (response.status !== 200)
         throw Error(`Oops, error! Error code: ${response.status}`);
 
+      // 50 photos
       const galleryData = await response.json();
-      console.log(galleryData);
+
       this.props.showGalleryPhotosList(
         photoData.id,
         photoData.title,
@@ -34,11 +35,11 @@ class Gallery extends React.Component {
     const response = await fetch(
       `https://jsonplaceholder.typicode.com/photos?albumId=${albumId}`
     );
+    // 50 photos
     const photosData = await response.json();
-    // console.log(albumId);
+
+    // get index between 0 and 49
     const randomIndex = Math.floor(Math.random() * photosData.length);
-    // console.log(`this is length: ${photosData.length}`);
-    // console.log(`this is random index: ${randomIndex}`);
     this.setState({
       galleryImg: photosData[randomIndex].url,
     });
@@ -50,7 +51,7 @@ class Gallery extends React.Component {
   }
 
   componentDidMount() {
-    // why this is also randomized??
+    // photoData.id ... 1 - 10
     this.getGalleryImg(this.props.photoData.id);
   }
 
@@ -58,8 +59,8 @@ class Gallery extends React.Component {
     return (
       <>
         <li className="list">
-          <div className="galleryDescriptionWrap">
-            <h2 className="galleryTitle">{this.props.photoData.title}</h2>
+          <div className="gallery-description-wrap">
+            <h2 className="gallery-title">{this.props.photoData.title}</h2>
             <p className="description">
               Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius
               ullam, quaerat veritatis accusantium dolorum soluta, blanditiis,
@@ -74,7 +75,7 @@ class Gallery extends React.Component {
             </button>
           </div>
           <img
-            className="topGalleryImg"
+            className="top-gallery-img"
             src={this.state.galleryImg}
             alt={this.props.photoData.title}
           />

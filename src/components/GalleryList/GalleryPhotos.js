@@ -1,5 +1,7 @@
 import React from "react";
 
+// Child
+
 class GalleryPhotos extends React.Component {
   state = {
     showLoadMore: true,
